@@ -1,1 +1,2 @@
-# Ecommerce-api
+# Tshirtshop-api
+[![CircleCI](https://circleci.com/gh/tonyguesswho/Ecommerce-api/tree/develop.svg?style=svg&circle-token=0768d804778c56264ebc1d9b21cca4575829db96)](https://circleci.com/gh/tonyguesswho/Ecommerce-api/tree/develop)

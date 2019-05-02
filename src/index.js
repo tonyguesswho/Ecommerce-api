@@ -1,6 +1,8 @@
 import express from 'express';
+import api from './api';
 import cors from 'cors';
 import bodyParser from 'body-parser'
+import {Product, Customer} from './models/'
 
 
 const app = express();
@@ -11,9 +13,23 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/api/v1', api);
 
 app.get('/', async (req, res) => {
-  res.json("Hello world")
+   try {
+       const response = await Product.findOne({
+           where:{
+               name:"Alsace"
+           },
+           include:['productAttributes']
+       })
+       res.json({
+           data:response.productAttributes
+       })
+   } catch (error) {
+       console.log(error)
+   }
+
 });
 
 

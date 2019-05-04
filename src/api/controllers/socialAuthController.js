@@ -22,12 +22,11 @@ class SocialAuthController {
       name: profile.name
     };
     try {
-      await Customer.findOrCreate({
+      await Customer.scope('withoutPassword').findOrCreate({
         where: { email: customerData.email },
         defaults: { name: customerData.name, password: 'facebook' },
       }).spread((customer) => {
         customer.reload();
-        delete customer.dataValues.password;
         customer = customer.dataValues;
         done(null, {
           customer

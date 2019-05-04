@@ -42,7 +42,12 @@ module.exports = (sequelize, DataTypes) => {
 
   }, {
     timestamps: false,
-    tableName: 'customer'
+    tableName: 'customer',
+    scopes: {
+      withoutPassword: {
+        attributes: { exclude: ['password'] },
+      }
+    }
   });
   Customer.associate = function(models) {
     // associations can be defined here

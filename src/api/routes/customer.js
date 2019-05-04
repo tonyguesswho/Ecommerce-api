@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
-import customerController from '../controllers/customerController'
+import customerController from '../controllers/customerController';
 import SocialAuthController from '../controllers/socialAuthController';
-import authenticate from '../../middlewares/authenticate';
 
 
 const customerRouter = Router();
@@ -17,5 +16,4 @@ customerRouter.get(
   passport.authenticate('facebook', { session: false }), SocialAuthController.authResponse
 );
 
-export default customerRouter
-
+export default customerRouter;

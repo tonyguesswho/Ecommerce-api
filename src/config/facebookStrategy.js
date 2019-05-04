@@ -1,5 +1,5 @@
 import { Strategy as FacebookStrategy } from 'passport-facebook';
-import socialAuthController from  '../api/controllers/socialAuthController';
+import socialAuthController from '../api/controllers/socialAuthController';
 import 'dotenv/config';
 
 const facebookStrategy = new FacebookStrategy(

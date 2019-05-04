@@ -26,6 +26,8 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^1.6.5",
+    "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
     "sequelize": "^5.7.3",
     "sequelize-cli": "^5.4.0"
   },

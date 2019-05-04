@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'audit'
   });
   Audit.associate = function(models) {
+    // associations can be defined here
   };
   return Audit;
 };

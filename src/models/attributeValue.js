@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'attribute_value'
   });
   AttributeValue.associate = function(models) {
+    // associations can be defined here
     AttributeValue.belongsTo(models.Attribute, {
         foreignKey: 'attribute_id',
         sourceKey: 'attribute_id',

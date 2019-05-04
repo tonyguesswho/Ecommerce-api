@@ -1,6 +1,8 @@
 import 'dotenv/config';
-import  { Customer }  from '../../models';
-import { createToken } from '../../helpers/util';
+import { Customer } from '../../models';
+import helpers from '../../helpers/util';
+
+const { createToken } = helpers;
 
 /**
  * @export
@@ -8,28 +10,27 @@ import { createToken } from '../../helpers/util';
  * @description Login with social accounts
  */
 class SocialAuthController {
-
-    /**
+  /**
    * @description - find or create customer
    * @param {object} profile
    * @param {function} done
    * @returns {object} customer
    */
   static async createCustomer(profile, done) {
-    const customer = {
+    const customerData = {
       email: profile.email,
       name: profile.name
     };
     try {
       await Customer.findOrCreate({
-        where: { email: customer.email },
-        defaults: { name: customer.name, password: 'facebook' },
+        where: { email: customerData.email },
+        defaults: { name: customerData.name, password: 'facebook' },
       }).spread((customer) => {
-        customer.reload()
-        delete customer.dataValues.password
-        customer = customer.dataValues
+        customer.reload();
+        delete customer.dataValues.password;
+        customer = customer.dataValues;
         done(null, {
-            customer
+          customer
         });
       });
     } catch (error) {
@@ -37,7 +38,7 @@ class SocialAuthController {
     }
   }
 
-   /**
+  /**
    * @description - callback function for passport strategy
    * @param {object} accessToken
    * @param {object} refreshToken
@@ -60,12 +61,11 @@ class SocialAuthController {
     * @param {object} res
     * @returns {json} json
   */
-
   static authResponse(req, res) {
-    const { customer } = req.user
+    const { customer } = req.user;
     const token = createToken(customer);
-    res.status(200).json({ customer, accessToken: `Bearer ${token}`, expires_in: '24hr'});
+    res.status(200).json({ customer, accessToken: `Bearer ${token}`, expires_in: '24hr' });
   }
 }
 
-export default SocialAuthController
+export default SocialAuthController;

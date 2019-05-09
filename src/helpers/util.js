@@ -82,6 +82,16 @@ export default {
         field: field || ''
       }
     });
-  }
+  },
 
+  truncateDescription(products, descriptionLength) {
+    const allProducts = products.map((product) => {
+      const { length } = product.dataValues.description;
+      if (length > descriptionLength) {
+        product.dataValues.description = `${product.dataValues.description.slice(0, descriptionLength)}...`;
+      }
+      return product;
+    });
+    return allProducts;
+  }
 };

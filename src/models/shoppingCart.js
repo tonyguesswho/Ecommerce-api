@@ -38,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
   });
   ShoppingCart.associate = function(models) {
     // associations can be defined here
+    ShoppingCart.belongsTo(models.Product, {
+      foreignKey: 'product_id',
+      targetKey: 'product_id',
+      onDelete: 'CASCADE'
+    });
   };
   return ShoppingCart;
 };

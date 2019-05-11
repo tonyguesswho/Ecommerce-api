@@ -35,10 +35,16 @@ const addressSchema = {
   shipping_region_id: Joi.number().required(),
 };
 
+const shoppingCartSchema = {
+  cart_id: Joi.required(),
+  product_id: Joi.number().required(),
+  attributes: Joi.required()
+
+};
+
 const cardSchema = {
   credit_card: Joi.string().required()
 };
-
 
 const options = { language: { key: '{{key}} ' } };
 
@@ -71,6 +77,9 @@ export default {
   },
   validateCustomerDetails(user) {
     return Joi.validate(user, customerSchema, options);
+  },
+  validateCartDetails(user) {
+    return Joi.validate(user, shoppingCartSchema, options);
   },
 
   errorResponse(res, status, code, message, field) {

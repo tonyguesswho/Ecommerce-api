@@ -1,9 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import passport from 'passport';
 import api from './api';
-import facebookStrategy from './config/facebookStrategy';
+
 
 
 const app = express();
@@ -15,11 +14,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', api);
-passport.use(facebookStrategy);
-
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 app.listen(PORT, () => {

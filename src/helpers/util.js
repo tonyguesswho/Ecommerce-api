@@ -42,6 +42,18 @@ const shoppingCartSchema = {
 
 };
 
+const orderSchema = {
+  cart_id: Joi.required(),
+  shipping_id: Joi.number().required(),
+  tax_id: Joi.number().required(),
+  status: Joi.number(),
+  reference: Joi.string(),
+  auth_code: Joi.string(),
+  comments: Joi.string(),
+  shipped_on: Joi.date()
+
+};
+
 const cardSchema = {
   credit_card: Joi.string().required()
 };
@@ -80,6 +92,9 @@ export default {
   },
   validateCartDetails(user) {
     return Joi.validate(user, shoppingCartSchema, options);
+  },
+  validateOrderDetails(user) {
+    return Joi.validate(user, orderSchema, options);
   },
 
   errorResponse(res, status, code, message, field) {

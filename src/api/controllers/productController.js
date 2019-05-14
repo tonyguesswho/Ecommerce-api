@@ -52,7 +52,7 @@ export default class ProductController {
       await redisClient.set('cacheKey', JSON.stringify({ count: totalProducts, rows: products }), 'EX', 10);
       return res.status(200).json({ count: totalProducts, rows: products });
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -73,7 +73,7 @@ export default class ProductController {
       if (product) return res.status(200).json(product);
       return errorResponse(res, 404, 'PRO_01', 'Product Not found', 'product');
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -103,7 +103,7 @@ export default class ProductController {
       const count = products.length;
       return res.status(200).json({ count, products });
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -133,7 +133,7 @@ export default class ProductController {
       const count = products.length;
       return res.status(200).json({ count, rows: products });
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -163,7 +163,7 @@ export default class ProductController {
       const count = products.length;
       return res.status(200).json({ count, rows: products });
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }

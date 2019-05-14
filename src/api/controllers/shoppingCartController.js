@@ -92,7 +92,7 @@ export default class ShoppingCartController {
         });
       }
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -118,7 +118,7 @@ export default class ShoppingCartController {
         return errorResponse(res, 400, 'PRD_01', 'Cart id  does not exist', 'cart Id');
       }
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -144,7 +144,7 @@ export default class ShoppingCartController {
       });
       res.status(200).json([]);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }

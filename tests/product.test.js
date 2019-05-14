@@ -53,6 +53,7 @@ const doBeforeEach = () => {
     ]);
   });
 };
+
 describe('Testing products endpoints', () => {
   doBeforeEach();
   describe('get all products', () => {

@@ -1,9 +1,5 @@
 import 'dotenv/config';
 import stripe from 'stripe';
-import helpers from '../../helpers/util';
-
-const { errorResponse } = helpers;
-
 
 const key = process.env.STRIPE_KEY;
 const Stripe = stripe(key);
@@ -42,7 +38,7 @@ export default class PaymentController {
       });
       res.status(200).json({ charge, message: 'Payment processed' });
     } catch (error) {
-      return errorResponse(res, 404, 'PAY_01', error.message, 'payment');
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }

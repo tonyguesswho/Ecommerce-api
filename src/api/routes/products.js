@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import productController from '../controllers/productController';
-
 // import authenticate from '../../middlewares/authenticate';
 
 

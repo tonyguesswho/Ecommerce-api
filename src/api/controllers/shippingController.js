@@ -31,15 +31,19 @@ class ShippingController {
       */
   static async getShippingRegion(req, res) {
     const { regionId } = req.params;
-    if (!regionId) {
-      errorResponse(res, 400, 'SHP_01', 'Shipping region Id is required', 'shipping region id');
+    try {
+      if (!regionId) {
+        errorResponse(res, 400, 'SHP_01', 'Shipping region Id is required', 'shipping region id');
+      }
+      if (isNaN(regionId)) return errorResponse(res, 400, 'SHP_01', 'shipping region id must be a number', 'shipping region id');
+      const region = await ShoppingRegion.findOne({
+        where: { shipping_region_id: regionId }
+      });
+      if (region) return res.status(200).json(region);
+      return errorResponse(res, 404, 'SHP_01', 'Shipping region Not found', 'shipping region');
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-    if (isNaN(regionId)) return errorResponse(res, 400, 'SHP_01', 'shipping region id must be a number', 'shipping region id');
-    const region = await ShoppingRegion.findOne({
-      where: { shipping_region_id: regionId }
-    });
-    if (region) return res.status(200).json(region);
-    return errorResponse(res, 404, 'SHP_01', 'Shipping region Not found', 'shipping region');
   }
 }
 

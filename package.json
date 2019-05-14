@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env process.env.NODE_ENV=test mocha --require babel-register tests/*.js --recursive --exit",
-    "start": "nodemon src/index.js --exec babel-node --",
-    "eslint": "eslint . --fix"
+    "start": "cross-env process.env.NODE_ENV=test babel-node src/index.js",
+    "eslint": "eslint . --fix",
+    "dev": "cross-env process.env.NODE_ENV=development nodemon src/index.js --exec babel-node --"
   },
   "repository": {
     "type": "git",

@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
     department_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Department',
-          key: 'department_id',
-        }
       },
     name: {
       type:DataTypes.STRING(100),
@@ -26,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
   });
   Category.associate = function(models) {
     // associations can be defined here
-    Category.belongsTo(models.Department, {
-        foreignKey: 'department_id',
-        sourceKey: 'department_id',
-        as: 'department'
-      })
+    // Category.belongsTo(models.Department, {
+    //     foreignKey: 'department_id',
+    //     sourceKey: 'department_id',
+    //     as: 'department'
+    //   })
     Category.belongsToMany(models.Product, {
       foreignKey: 'category_id',
       through: 'product_category',

@@ -1,9 +1,11 @@
 /* eslint no-restricted-globals: ["error", "event", "fdescribe"] */
 
 import 'dotenv/config';
+import redis from 'async-redis';
 import helpers from '../../helpers/util';
-
 import db from '../../models';
+
+const redisClient = redis.createClient(process.env.REDIS_URL);
 
 const { Product } = db;
 
@@ -35,12 +37,19 @@ export default class ProductController {
         limit: parseInt(limit) || 20,
         offset: (parseInt(limit || 20) * ((parseInt(page) - 1))) || 0
       };
+      let products;
+      const redisProducts = await redisClient.get('cacheKey');
+      if (redisProducts) {
+        products = JSON.parse(redisProducts);
+        return res.status(200).json({ count: products.count, rows: products.rows });
+      }
+      products = await Product.findAll(productsQuery);
 
-      let products = await Product.findAll(productsQuery);
       if (descriptionLength) {
         products = truncateDescription(products, descriptionLength);
       }
       const totalProducts = await Product.count();
+      await redisClient.set('cacheKey', JSON.stringify({ count: totalProducts, rows: products }), 'EX', 10);
       return res.status(200).json({ count: totalProducts, rows: products });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });

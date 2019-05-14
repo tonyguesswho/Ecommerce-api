@@ -53,7 +53,7 @@ class CustomerController {
         expires_in: '24h'
       });
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -81,7 +81,8 @@ class CustomerController {
 
       if (match) {
         const customer = existingCustomer.dataValues;
-        const token = createToken(customer);
+        delete existingCustomer.dataValues.password;
+        const token = await createToken(customer);
         res.status(200).json({
           accessToken: `Bearer ${token}`,
           customer,
@@ -91,7 +92,7 @@ class CustomerController {
         return errorResponse(res, 400, 'USR_01', 'Email or Password is invalid.');
       }
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -104,14 +105,14 @@ class CustomerController {
   static async getCustomer(req, res) {
     try {
       const customer = await Customer.scope('withoutPassword').findOne({
-        where: { customer_id: req.user.customerId }
+        where: { customer_id: req.user.customer_id }
       });
       if (!customer) {
         return errorResponse(res, 404, 'USR_04', 'Customer does not exist.');
       }
       return res.status(200).json(customer);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -129,14 +130,14 @@ class CustomerController {
         const errorMessage = error.details[0].message;
         return errorResponse(res, 400, 'USR_02', errorMessage, errorField);
       }
-      const customer = await Customer.scope('withoutPassword').findOne({ where: { customer_id: req.user.customerId } });
+      const customer = await Customer.scope('withoutPassword').findOne({ where: { customer_id: req.user.customer_id } });
       if (!customer) {
         return errorResponse(res, 404, 'USR_04', 'Customer does not exist.');
       }
       const updatedCustomer = await customer.update(req.body);
       return res.status(200).json(updatedCustomer);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -154,14 +155,14 @@ class CustomerController {
         const errorMessage = error.details[0].message;
         return errorResponse(res, 400, 'USR_02', errorMessage, errorField);
       }
-      const customer = await Customer.scope('withoutPassword').findOne({ where: { customer_id: req.user.customerId } });
+      const customer = await Customer.scope('withoutPassword').findOne({ where: { customer_id: req.user.customer_id } });
       if (!customer) {
         return errorResponse(res, 404, 'USR_04', 'Customer does not exist.');
       }
       const updatedCustomer = await customer.update(req.body);
       return res.status(200).json(updatedCustomer);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -179,14 +180,14 @@ class CustomerController {
         const errorMessage = error.details[0].message;
         return errorResponse(res, 400, 'USR_02', errorMessage, errorField);
       }
-      const customer = await Customer.scope('withoutPassword').findOne({ where: { customer_id: req.user.customerId } });
+      const customer = await Customer.scope('withoutPassword').findOne({ where: { customer_id: req.user.customer_id } });
       if (!customer) {
         return errorResponse(res, 404, 'USR_04', 'Customer does not exist.');
       }
       const updatedCustomer = await customer.update(req.body);
       return res.status(200).json(updatedCustomer);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }

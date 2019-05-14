@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import 'babel-polyfill';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import api from './api';

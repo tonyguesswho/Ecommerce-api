@@ -53,7 +53,7 @@ class CustomerController {
         expires_in: '24h'
       });
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -81,7 +81,7 @@ class CustomerController {
 
       if (match) {
         const customer = existingCustomer.dataValues;
-        const token = createToken(customer);
+        const token = await createToken(customer);
         res.status(200).json({
           accessToken: `Bearer ${token}`,
           customer,
@@ -91,7 +91,7 @@ class CustomerController {
         return errorResponse(res, 400, 'USR_01', 'Email or Password is invalid.');
       }
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -111,7 +111,7 @@ class CustomerController {
       }
       return res.status(200).json(customer);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -136,7 +136,7 @@ class CustomerController {
       const updatedCustomer = await customer.update(req.body);
       return res.status(200).json(updatedCustomer);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -161,7 +161,7 @@ class CustomerController {
       const updatedCustomer = await customer.update(req.body);
       return res.status(200).json(updatedCustomer);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -186,7 +186,7 @@ class CustomerController {
       const updatedCustomer = await customer.update(req.body);
       return res.status(200).json(updatedCustomer);
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }

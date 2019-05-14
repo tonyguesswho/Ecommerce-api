@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env process.env.NODE_ENV=test mocha --require babel-register tests/*.js --recursive --exit",
-    "start": "cross-env process.env.NODE_ENV=test babel-node src/index.js",
+    "start": "node build/index.js",
     "eslint": "eslint . --fix",
-    "dev": "cross-env process.env.NODE_ENV=development nodemon src/index.js --exec babel-node --"
+    "dev": "cross-env process.env.NODE_ENV=development nodemon src/index.js --exec babel-node --",
+    "clean": "rm -rf dist && mkdir dist",
+    "postinstall": "babel src -d build"
   },
   "repository": {
     "type": "git",

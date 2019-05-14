@@ -31,15 +31,19 @@ class TaxController {
       */
   static async getTax(req, res) {
     const { taxId } = req.params;
-    if (!taxId) {
-      errorResponse(res, 400, 'USR_01', 'Tax Id is required', 'tax id');
+    try {
+      if (!taxId) {
+        errorResponse(res, 400, 'USR_01', 'Tax Id is required', 'tax id');
+      }
+      if (isNaN(taxId)) return errorResponse(res, 400, 'USR_01', 'tax id must be a number', 'tax id');
+      const tax = await Tax.findOne({
+        where: { tax_id: taxId }
+      });
+      if (tax) return res.status(200).json(tax);
+      return errorResponse(res, 404, 'PRO_01', 'Tax Not found', 'tax');
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-    if (isNaN(taxId)) return errorResponse(res, 400, 'USR_01', 'tax id must be a number', 'tax id');
-    const tax = await Tax.findOne({
-      where: { tax_id: taxId }
-    });
-    if (tax) return res.status(200).json(tax);
-    return errorResponse(res, 404, 'PRO_01', 'Tax Not found', 'tax');
   }
 }
 

@@ -77,7 +77,7 @@ export default class OrderController {
       await orderEmail(req.user);
       res.status(200).json({ orderId: order.order_id });
     } catch (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -98,7 +98,7 @@ export default class OrderController {
       if (order) return res.status(200).json(order);
       return errorResponse(res, 404, 'ORD_01', 'Order Not found', 'order');
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }

@@ -69,9 +69,10 @@ export default {
     const match = await bcrypt.compare(password, userPassword);
     return match;
   },
+
   createToken(user) {
     const { customer_id: customerId, name, email } = user;
-    return jwt.sign({ customerId, name, email }, process.env.SECRET, { expiresIn: 86400 });
+    return jwt.sign({ customer_id: customerId, name, email }, process.env.SECRET, { expiresIn: 86400 });
   },
 
   validateRegisterDetails(user) {

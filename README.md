@@ -54,8 +54,41 @@ cp .evn.sample .env
 
 * Create a MySQL database and run the `sql` file in the models directory to migrate the database
 
+### Authentication
+After Login or Register a token is provided and can be used to make  further request the the  API if the endpoints requires authentication.
+
+```
+Token's example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6MTIsIm5hbWUiOiJFZGVyIFRhdmVpcmEiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE1NTA3ODYyMjAsImV4cCI6MTU1MDg3MjYyMH0.QEGdry367EQNxBqzuUDCGJscWkq8YQwJdGBgV3hztR0
+```
+
+The Token need to be in the header param "user-key".
+
+
+### Pagination
+All params of pagination are not required.
+
+The pagination can to have the query params below:
+
+- page - Number of page. Default is "1".
+- limit - Number of limit per page. Default is 20
+
+
 ## Stripe Integration
 
 Shopping orders are paid for using a Stripe integration. In order to use the stripe endpoint send a `POST` request to `/stripe/charge`
 
-You will need to provide a `stripeToken`. To get the token fill out the form at https://ecommerce-turing-core.herokuapp.com/stripe
+You will need to provide a `stripeToken`. To get the token use the example here https://stripe.com/docs/stripe-js/elements/quickstart
+
+
+### Errors
+ - The error response has the following structure:
+```
+code - Error's Code.
+message - Error's Message.
+field - Error's Field.
+Example of Error:
+```
+
+```
+{"error":{"status":400,"code":"USR_01","message":"The email don't exists.","field":"email"}}
+```

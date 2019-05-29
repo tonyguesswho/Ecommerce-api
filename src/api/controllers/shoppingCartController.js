@@ -132,17 +132,32 @@ export default class ShoppingCartController {
   static async emptyCart(req, res) {
     try {
       const { cart_id: cartId } = req.params;
-      if (!cartId) {
-        res.status(400).json({
-          code: 'USR_02',
-          message: 'The cart id is required',
-          field: 'cart_id'
-        });
-      }
       await ShoppingCart.destroy({
         where: { cart_id: cartId }
       });
       res.status(200).json([]);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
+  /**
+    * @description -This method removes an item from the cart
+    * @param {object} req - The request payload sent from the router
+    * @param {object} res - The response payload sent back from the controller
+    * @returns {array} - empty cart
+    */
+  static async removeProduct(req, res) {
+    try {
+      const { item_id: itemId } = req.params;
+
+      const item = await ShoppingCart.findOne({ where: { item_id: itemId } });
+      if (!item) {
+        return errorResponse(res, 404, 'CART_01', 'No item found', 'item_id');
+      }
+      const query = `CALL shopping_cart_remove_product(${itemId});`;
+      await db.sequelize.query(query);
+      return res.status(204).json();
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
     }

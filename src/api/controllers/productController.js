@@ -1,6 +1,7 @@
 /* eslint no-restricted-globals: ["error", "event", "fdescribe"] */
 
 import 'dotenv/config';
+import { Op } from 'sequelize';
 import redis from 'async-redis';
 import helpers from '../../helpers/util';
 import db from '../../models';
@@ -86,22 +87,41 @@ export default class ProductController {
   static async searchProducts(req, res) {
     try {
       const {
-        page, limit = 20, description_length: descriptionLength = 200, query_string: queryString, all_words: allWords = 'on'
+        page, limit, description_length: descriptionLength, query_string: queryString, all_words: allWords
       } = req.query;
       if (!queryString) {
         errorResponse(res, 400, 'USR_01', 'Query string is required', 'query_string');
       }
-      let startIndex = 0;
-      if (page) startIndex = (page - 1) * limit;
-
-      const searchQuery = 'CALL catalog_search(:queryString,:allWords,:descriptionLength,:limit,:startIndex)';
-      const products = await db.sequelize.query(searchQuery, {
-        replacements: {
-          queryString, allWords, descriptionLength, limit, startIndex
-        }
-      });
+      let query;
+      if (allWords === 'on') {
+        query = {
+          where: {
+            [Op.or]: [{
+              name: { [Op.like]: `${queryString}` },
+            }, {
+              description: { [Op.like]: `${queryString}` }
+            }]
+          },
+        };
+      } else {
+        query = {
+          where: {
+            [Op.or]: [{
+              name: { [Op.like]: `%${queryString}%` },
+            }, {
+              description: { [Op.like]: `%${queryString}%` }
+            }]
+          },
+        };
+      }
+      query.limit = parseInt(limit) || 20;
+      query.offset = (parseInt(limit || 20) * ((parseInt(page) - 1))) || 0;
+      let products = await Product.findAll(query);
+      if (descriptionLength) {
+        products = truncateDescription(products, descriptionLength);
+      }
       const count = products.length;
-      return res.status(200).json({ count, products });
+      return res.status(200).json({ count, rows: products });
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
     }

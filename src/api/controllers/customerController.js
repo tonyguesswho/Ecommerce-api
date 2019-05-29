@@ -14,10 +14,10 @@ const {
 } = helpers;
 
 /**
- * @export
- * @class CustomerController
- * @description Performs operations on the customer
- */
+   * @export
+   * @class CustomerController
+   *  @description Performs operations on the customer
+   */
 class CustomerController {
   /**
     * @description -This method registers a customer

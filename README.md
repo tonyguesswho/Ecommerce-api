@@ -59,3 +59,6 @@ cp .evn.sample .env
 Shopping orders are paid for using a Stripe integration. In order to use the stripe endpoint send a `POST` request to `/stripe/charge`
 
 You will need to provide a `stripeToken`. To get the token fill out the form at https://ecommerce-turing-core.herokuapp.com/stripe
+
+### Project structure
+![](https://user-images.githubusercontent.com/19865565/58978860-ab5f4c80-87c4-11e9-99cc-99fd70619f5c.png)

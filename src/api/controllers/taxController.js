@@ -32,9 +32,6 @@ class TaxController {
   static async getTax(req, res) {
     const { taxId } = req.params;
     try {
-      if (!taxId) {
-        errorResponse(res, 400, 'USR_01', 'Tax Id is required', 'tax id');
-      }
       if (isNaN(taxId)) return errorResponse(res, 400, 'USR_01', 'tax id must be a number', 'tax id');
       const tax = await Tax.findOne({
         where: { tax_id: taxId }

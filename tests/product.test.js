@@ -5,65 +5,18 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import 'babel-polyfill';
 import app from '../src/index';
-import db from '../src/models';
-
-const {
-  Product, Department, Category, ProductCategory
-} = db;
-const newProduct = {
-  name: 'test product',
-  description: 'test description',
-  price: '444',
-  discounted_price: '40',
-  image: 'test.gif',
-  image2: 'test2.gif',
-  thumbnail: 'somali-fish-thumbnail.gif',
-  display: 2
-};
-
-const newDepartment = {
-  department_id: 1,
-  name: 'Regional',
-  description: 'Proud of your country? Wear a T-s'
-};
-
-const newCategory = {
-  category_id: 1,
-  name: 'French',
-  description: 'The French',
-  department_id: 1
-};
-const newProductCategory = {
-  product_id: 1,
-  category_id: 1
-};
-
 
 chai.use(chaiHttp);
-const doBeforeEach = () => {
-  before(async () => {
-    await db.sequelize.sync({
-      force: true
-    });
-    await Promise.all([
-      Product.create(newProduct),
-      Department.create(newDepartment),
-      Category.create(newCategory),
-      ProductCategory.create(newProductCategory)
-    ]);
-  });
-};
+
 
 describe('Testing products endpoints', () => {
-  doBeforeEach();
   describe('get all products', () => {
     it('should fetch all products', (done) => {
       chai.request(app)
-        .get('/products')
+        .get('/products?description_length=20')
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.an('object');
-          expect(res.body.count).to.be.equal(1);
           expect(res.body.rows).to.be.an('array');
           done();
         });
@@ -79,11 +32,84 @@ describe('Testing products endpoints', () => {
           done();
         });
     });
-    it('should not fetch single product if product_id is invalid', (done) => {
+    it('should not return 404 if product id dosent exist', (done) => {
       chai.request(app)
-        .get('/products/9')
+        .get('/products/9000')
         .end((err, res) => {
           expect(res.status).to.equal(404);
+          done();
+        });
+    });
+  });
+
+  describe('search products', () => {
+    it('should return error if search term is not provided', (done) => {
+      chai.request(app)
+        .get('/products/search')
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.be.an('object');
+          expect(res.body.error.message).to.equal('Query string is required');
+          done();
+        });
+    });
+    it('should return search item', (done) => {
+      chai.request(app)
+        .get('/products/search?all_words=off&description_length=20&limit=20&query_string=St.&page=1')
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          done();
+        });
+    });
+    it('should return search item with allwords on', (done) => {
+      chai.request(app)
+        .get('/products/search?all_words=on&description_length=20&limit=20&query_string=St.&page=1')
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          done();
+        });
+    });
+  });
+
+  describe('gets products in category', () => {
+    it('should return error if category id is not provided', (done) => {
+      chai.request(app)
+        .get('/products/inCategory')
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.be.an('object');
+          expect(res.body.error.message).to.equal('Category Id is required');
+          done();
+        });
+    });
+
+    it('should return product in category', (done) => {
+      chai.request(app)
+        .get('/products/inCategory/1')
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          done();
+        });
+    });
+  });
+
+  describe('gets products in department', () => {
+    it('should return error if department id is not provided', (done) => {
+      chai.request(app)
+        .get('/products/inDepartment')
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.be.an('object');
+          expect(res.body.error.message).to.equal('Category Id is required');
+          done();
+        });
+    });
+
+    it('should return product in department', (done) => {
+      chai.request(app)
+        .get('/products/inDepartment/1')
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
           done();
         });
     });

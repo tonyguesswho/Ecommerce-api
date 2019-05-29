@@ -32,9 +32,6 @@ class ShippingController {
   static async getShippingRegion(req, res) {
     const { regionId } = req.params;
     try {
-      if (!regionId) {
-        errorResponse(res, 400, 'SHP_01', 'Shipping region Id is required', 'shipping region id');
-      }
       if (isNaN(regionId)) return errorResponse(res, 400, 'SHP_01', 'shipping region id must be a number', 'shipping region id');
       const region = await ShoppingRegion.findOne({
         where: { shipping_region_id: regionId }

@@ -2,14 +2,9 @@
 
 import 'dotenv/config';
 import helpers from '../../helpers/util';
-import getCart from '../../helpers/shoppingCart';
-import getTotalAmount from '../../helpers/order';
 import orderEmail from '../../helpers/emails';
 
 import db from '../../models';
-
-const { Order, ShoppingCart, Product } = db;
-
 
 const {
   errorResponse,
@@ -37,12 +32,8 @@ export default class OrderController {
         cart_id: cartId,
         shipping_id: shippingId,
         tax_id: taxId,
-        shipped_on: shippedOn,
-        comments,
-        status,
-        reference,
-        auth_code: authCode
       } = req.body;
+      const { customer_id: customerId } = req.user;
 
       const { error } = validateOrderDetails(req.body);
       if (error) {
@@ -50,39 +41,23 @@ export default class OrderController {
         const errorMessage = error.details[0].message;
         return errorResponse(res, 400, 'ORD_01', errorMessage, errorField);
       }
-      const cartItems = await ShoppingCart.findAll({
-        where: { cart_id: cartId },
-        include: [{
-          model: Product
-        }]
+      const createOrderQuery = 'CALL shopping_cart_create_order(:cartId,:customerId,:shippingId,:taxId)';
+      const order = await db.sequelize.query(createOrderQuery, {
+        replacements: {
+          cartId, customerId, shippingId, taxId
+        }
       });
-      let shoppingCartItems = [];
-      if (cartItems.length > 0) {
-        shoppingCartItems = getCart(cartItems);
-      }
-      const totalAmount = getTotalAmount(shoppingCartItems);
-      const order = await Order.create({
-        cart_id: cartId,
-        shipping_id: shippingId,
-        tax_id: taxId,
-        comments,
-        status,
-        total_amount: totalAmount,
-        reference,
-        auth_code: authCode,
-        customer_id: req.user.customerId,
-        shipped_on: shippedOn,
-        created_on: Date.now(),
-      });
-      await orderEmail(req.user);
-      res.status(200).json({ orderId: order.order_id });
+      const orderDetailsquery = `CALL orders_get_order_info(${order[0].orderId})`;
+      const orderDetails = await db.sequelize.query(orderDetailsquery);
+      await orderEmail(req.user, orderDetails);
+      res.status(200).json(order);
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
   /**
-      * @description -This method views an order
+      * @description -This gets details of an order
      * @param {object} req - The request payload
     * @param {object} res - The response payload sent back from the method
     * @returns {object} - order
@@ -91,11 +66,9 @@ export default class OrderController {
     try {
       const { orderId } = req.params;
       if (isNaN(orderId)) return errorResponse(res, 400, 'ORD_01', 'Order id must be a number', 'order id');
-
-      const order = await Order.findOne({
-        where: { order_id: orderId }
-      });
-      if (order) return res.status(200).json(order);
+      const query = `CALL orders_get_order_info(${orderId})`;
+      const order = await db.sequelize.query(query);
+      if (order.length > 0) return res.status(200).json(order);
       return errorResponse(res, 404, 'ORD_01', 'Order Not found', 'order');
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });

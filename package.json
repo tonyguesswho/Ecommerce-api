@@ -4,8 +4,7 @@
   "description": "An api for a tshirtshop",
   "main": "index.js",
   "scripts": {
-    "pre-test": "mysql -U root -f ./models/tshirtshop.sql",
-    "test": "cross-env process.env.NODE_ENV=test nyc mocha --require babel-register tests/*.js --recursive --exit",
+    "test": "cross-env process.env.NODE_ENV=test mocha --require babel-register tests/*.js --recursive --exit",
     "start": "node build/index.js",
     "eslint": "eslint . --fix",
     "dev": "cross-env process.env.NODE_ENV=development nodemon src/index.js --exec babel-node --",

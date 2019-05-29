@@ -36,6 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "mysql2": "^1.6.5",
+    "nyc": "^14.1.1",
     "request": "^2.88.0",
     "sequelize": "^5.7.3",
     "sequelize-cli": "^5.4.0",

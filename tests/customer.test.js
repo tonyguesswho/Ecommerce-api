@@ -21,17 +21,6 @@ const customer2 = {
   email: 'test2@gmail.com',
   name: 'tony',
   password: 'password',
-  address1: '',
-  address2: '',
-  city: '',
-  region: '',
-  postalCode: '',
-  country: '',
-  shippingRegionId: '',
-  creditCard: '',
-  dayPhone: '',
-  evePhone: '',
-  mobPhone: '',
 };
 
 let token = '';

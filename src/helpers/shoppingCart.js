@@ -1,4 +1,3 @@
-
 const calculateSubTotal = (cartItem) => {
   let subTotal = 0;
   const { price, discounted_price: discountedPrice } = cartItem.dataValues.Product;

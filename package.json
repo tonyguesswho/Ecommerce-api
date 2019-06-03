@@ -4,7 +4,7 @@
   "description": "An api for a tshirtshop",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env process.env.NODE_ENV=test mocha --require babel-register tests/*.js --recursive --exit",
+    "test": "cross-env process.env.NODE_ENV=test nyc mocha --require babel-register tests/*.js --recursive --exit",
     "start": "node build/index.js",
     "eslint": "eslint . --fix",
     "dev": "cross-env process.env.NODE_ENV=development nodemon src/index.js --exec babel-node --",
@@ -36,6 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "mysql2": "^1.6.5",
+    "newrelic": "^5.9.1",
     "nyc": "^14.1.1",
     "request": "^2.88.0",
     "sequelize": "^5.7.3",

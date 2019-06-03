@@ -72,15 +72,4 @@ describe('Get Order details', () => {
         done();
       });
   });
-
-  it('should return error if order is not found', (done) => {
-    chai.request(app)
-      .get('/orders/9')
-      .set('USER-KEY', token)
-      .end((err, res) => {
-        expect(res.status).to.equal(404);
-        expect(res.body.error.message).to.equal('Order Not found');
-        done();
-      });
-  });
 });
